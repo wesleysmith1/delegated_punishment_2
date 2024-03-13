@@ -170,7 +170,7 @@ let officerGameComponent = {
                             </svg>
                       </div>
                       <div class="map-label">
-                        {{'Civilian ' + (map+1) + ' '}} 
+                        {{'Civilian ' + (map+1) + ' '}} - {{playerBalances[map+1] ? Math.round(playerBalances[map+1]['balance'] / 100) * 100 : ''}}
                     </div>
                     </div>
                 </div>
