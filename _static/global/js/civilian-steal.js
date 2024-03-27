@@ -228,7 +228,7 @@ let civilianStealComponent = {
                                 </svg>
                             </div>
                             <div class="map-label">
-                                {{map+1 == groupPlayerId ? 'You' : 'Civilian ' + (map+1) + ' '}} 
+                                {{map+1 == groupPlayerId ? 'You' : 'Civilian ' + (map+1) + ' '}} - {{playerBalances[map+1] ? Math.round(playerBalances[map+1]['balance'] / 100) * 100 : ''}}
                             </div>
                       </div>
                     </div>

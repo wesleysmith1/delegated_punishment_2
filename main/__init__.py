@@ -37,7 +37,8 @@ class C(BaseConstants):
     officer_reprimand_amount = [l,l,l,l,l,l,l,m,m,m,m,m]
 
     """Officer income (bonus). One for each group"""
-    officer_income = 50
+    officer_income = 9000 # separate this out for treatments.
+    officer_bonus_percentage = .5
 
     """ 
     this is the size of the tokens and maps are defined. 
@@ -74,19 +75,19 @@ class C(BaseConstants):
     officer_start_balance = 1400
     civilian_start_balance = 1400
 
-        # probability calculations
+    # probability calculations
     # key=#probabilities -> innocent, culprit, prob nobody
     # the index
     calculated_probabilities = [
-        (.2, .2, .2), # 0 defense tokens tokens
-        (.18, .26, .2), # 1 defense ...
-        (.16, .32, .2), # 2 ...
-        (.14, .38, .2), # 3 ...
-        (.12, .44, .2), # 4 ...
-        (.10, .50, .2), # 5 ...
-        (.08, .56, .2), # 6 ...
-        (.06, .62, .2), # 7 ...
-        (.04, .68, .2), # 8 ...
+        (.24, .24, .04), # 0 defense tokens tokens
+        (.33, .21, .04), # 1 defense ...
+        (.42, .18, .04), # 2 ...
+        (.51, .15, .04), # 3 ...
+        (.60, .12, .04), # 4 ...
+        (.69, .09, .04), # 5 ...
+        (.78, .06, .04), # 6 ...
+        (.87, .03, .04), # 7 ...
+        (.96, .0, .04), # 8 ...
     ]
 
 
@@ -100,7 +101,7 @@ class Group(BaseGroup):
     officer_bonus = models.IntegerField(initial=0)
 
     # counters
-    officer_bonus_total = models.IntegerField(initial=0)
+    officer_bonus_total = models.FloatField(initial=0)
     civilian_fine_total = models.IntegerField(initial=0)
     officer_reprimand_total = models.IntegerField(initial=0)
     intercept_total = models.IntegerField(initial=0)
@@ -283,8 +284,10 @@ class Player(BasePlayer):
     def civilian_harvest(self):
         self.balance += self.income
 
-    def officer_bonus(self):
-        self.balance += self.income
+    def officer_bonus(self, victim):
+        officer_bonus = victim.balance * C.officer_bonus_percentage
+        self.balance += officer_bonus
+        return officer_bonus
 
     def officer_reprimand(self):
         self.balance -= self.group.officer_reprimand_amount
@@ -403,7 +406,7 @@ class Main(Page):
 
     @staticmethod
     def get_timeout_seconds(player: Player):
-        return None if player.round_number == 1 else 15
+        return None if player.round_number == 1 else 150
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -1002,7 +1005,7 @@ class Main(Page):
                         officer = player
                     else:
                         officer = player.group.get_player_by_id(1)
-                    officer.officer_bonus()
+                    officer_bonus = officer.officer_bonus(player.group.get_player_by_id(innocent))
 
                     # increment counter
                     officer_bonus += 1
@@ -1027,7 +1030,7 @@ class Main(Page):
                         "audit": str(audit),
 
                         # notification log info
-                        "officer_bonus": officer.income,
+                        "officer_bonus": officer_bonus,
                         "officer_reprimand": officer_reprimand,
                     })
 

@@ -20,8 +20,8 @@ let gameStatusComponent = {
     },
     data: function () {
         return {
-            probInnocent: [20,18,16,14,12,10,8,6,4],
-            probCulprit: [20,26,32,38,44,50,56,62,68]
+            probInnocent: [24,21,18,15,12,9,6,3,0,],
+            probCulprit: [24,33,42,51,60,69,78,87,96,],
         }
     },
     mounted: function () {
