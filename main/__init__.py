@@ -37,8 +37,7 @@ class C(BaseConstants):
     officer_reprimand_amount = [m,m,m,m,m,m,m,m,m,m,m,m]
 
     """Officer income (bonus). One for each group"""
-    officer_income = 9000 # separate this out for treatments.
-    officer_bonus_percentage = .025
+    officer_income = 50
 
     """ 
     this is the size of the tokens and maps are defined. 
@@ -75,7 +74,7 @@ class C(BaseConstants):
     officer_start_balance = 2000
     civilian_start_balances = [1500, 1500, 2000, 2500, 2500]
 
-    # probability calculations
+        # probability calculations
     # key=#probabilities -> innocent, culprit, prob nobody
     # the index
     calculated_probabilities = [
@@ -101,7 +100,7 @@ class Group(BaseGroup):
     officer_bonus = models.IntegerField(initial=0)
 
     # counters
-    officer_bonus_total = models.FloatField(initial=0)
+    officer_bonus_total = models.IntegerField(initial=0)
     civilian_fine_total = models.IntegerField(initial=0)
     officer_reprimand_total = models.IntegerField(initial=0)
     intercept_total = models.IntegerField(initial=0)
@@ -284,10 +283,8 @@ class Player(BasePlayer):
     def civilian_harvest(self):
         self.balance += self.income
 
-    def officer_bonus(self, victim):
-        officer_bonus = victim.balance * C.officer_bonus_percentage
-        self.balance += officer_bonus
-        return officer_bonus
+    def officer_bonus(self):
+        self.balance += self.income
 
     def officer_reprimand(self):
         self.balance -= self.group.officer_reprimand_amount
@@ -410,7 +407,7 @@ class Main(Page):
 
     @staticmethod
     def get_timeout_seconds(player: Player):
-        return None if player.round_number == 1 else 150
+        return None if player.round_number == 1 else 15
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -1009,7 +1006,7 @@ class Main(Page):
                         officer = player
                     else:
                         officer = player.group.get_player_by_id(1)
-                    officer_bonus = officer.officer_bonus(player.group.get_player_by_id(innocent))
+                    officer.officer_bonus()
 
                     # increment counter
                     officer_bonus += 1
@@ -1034,7 +1031,7 @@ class Main(Page):
                         "audit": str(audit),
 
                         # notification log info
-                        "officer_bonus": officer_bonus,
+                        "officer_bonus": officer.income,
                         "officer_reprimand": officer_reprimand,
                     })
 
