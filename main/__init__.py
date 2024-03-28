@@ -34,11 +34,11 @@ class C(BaseConstants):
     m = 200
     h = 800
     # treatment variables including tutorial
-    officer_reprimand_amount = [l,l,l,l,l,l,l,m,m,m,m,m]
+    officer_reprimand_amount = [m,m,m,m,m,m,m,m,m,m,m,m]
 
     """Officer income (bonus). One for each group"""
     officer_income = 9000 # separate this out for treatments.
-    officer_bonus_percentage = .5
+    officer_bonus_percentage = .025
 
     """ 
     this is the size of the tokens and maps are defined. 
@@ -72,8 +72,8 @@ class C(BaseConstants):
     """
     steal_token_slots = 20
 
-    officer_start_balance = 1400
-    civilian_start_balance = 1400
+    officer_start_balance = 2000
+    civilian_start_balances = [1500, 1500, 2000, 2500, 2500]
 
     # probability calculations
     # key=#probabilities -> innocent, culprit, prob nobody
@@ -218,7 +218,7 @@ class Player(BasePlayer):
     map = models.IntegerField(initial=0)
     last_updated = models.FloatField(blank=True)
     roi = models.IntegerField(initial=0)
-    balance = models.FloatField(initial=C.civilian_start_balance)
+    balance = models.FloatField(initial=0)
     harvest_status = models.IntegerField(initial=0)
     harvest_screen = models.BooleanField(initial=True)
     income = models.IntegerField(initial=40)
@@ -379,16 +379,20 @@ def creating_session(subsession: Subsession):
                 if group.round_number < 3:
                     if p.id_in_group > 1:
                         p.income = p.session.config['tutorial_civilian_income']
+                        p.balance = subsession.session.config['tutorial_start_balance']
                     else:
                         p.income = p.session.config['tutorial_officer_bonus']
+                        p.balance = C.officer_start_balance
                 else:
                     # set harvest amount for civilians
                     if p.id_in_group > 1:
                         income_index = p.id_in_group-2
                         p.income = round_incomes[income_index]
+                        p.balance = C.civilian_start_balances[p.id_in_group-2]
                     else:
                         # is officer
                         p.income = p.participant.vars['officer_bonus']
+                        p.balance = C.officer_start_balance
 
         # create defend tokens for current round for each group
         for i in range(C.defend_token_total):
