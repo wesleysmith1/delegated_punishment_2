@@ -600,7 +600,7 @@ class CPlayer:
         if self.player_id == 1:
             self.balance = self.C.officer_start_balance
         else:
-            self.balance = self.C.civilian_start_balance
+            self.balance = self.C.civilian_start_balances[self.player_id-2]
 
         self.roi = 0
         self.t_formatter = time_formatter
