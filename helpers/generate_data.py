@@ -263,10 +263,11 @@ class GenerateCsv:
                             wrongful_conviction = 1 if intersection['wrongful_conviction'] else 0
 
                             # officer bonus
-                            officer.balance += intersection['officer_bonus']
+                            officer_bonus = intersection['officer_bonus']
+                            officer.balance += officer_bonus
 
                             i = self.format_intersection(token_number, culprit_id, steal_token_id, defend_map, guilty_id, audit,
-                                                    reprimanded)
+                                                    reprimanded, officer_bonus)
 
                             # wrongful conviction
                             if wrongful_conviction:
@@ -281,7 +282,7 @@ class GenerateCsv:
                                 culprit.balance -= self.C.civilian_fine_amount
 
                         else:
-                            i = self.format_intersection(token_number, culprit_id, steal_token_id, defend_map, 'NA', 0, 0)
+                            i = self.format_intersection(token_number, culprit_id, steal_token_id, defend_map, 'NA', 0, 0, 0)
 
                         # log.info("CULPRIT_ID: {}".format(culprit_id))
 
@@ -354,7 +355,8 @@ class GenerateCsv:
                         wrongful_conviction = 1 if intersection['wrongful_conviction'] else 0
 
                         # officer bonus
-                        officer.balance += intersection['officer_bonus']
+                        officer_bonus = intersection['officer_bonus']
+                        officer.balance += officer_bonus
 
                         #todo clean this logic up
                         i = self.format_intersection(
@@ -364,7 +366,8 @@ class GenerateCsv:
                             steal_map,
                             'NA' if guilty_id == 0 else guilty_id,
                             audit,
-                            reprimanded
+                            reprimanded,
+                            officer_bonus,
                         )
 
                         # if wrongful conviction
@@ -383,7 +386,7 @@ class GenerateCsv:
                             culprit.balance -= self.C.civilian_fine_amount
 
                     else:
-                        i = self.format_intersection(defend_token_number, culprit_id, steal_token_id, steal_map, 'NA', 0, 0)
+                        i = self.format_intersection(defend_token_number, culprit_id, steal_token_id, steal_map, 'NA', 0, 0, 0)
 
                     formatted_intersection = "[{}]".format(i)  # single intersection
 
@@ -497,7 +500,8 @@ class GenerateCsv:
                 self.C.civilian_map_size,
                 self.C.officer_reprimand_amount,
                 self.C.officer_review_probability,
-                datetime.datetime.fromtimestamp(meta_data['session_start']).strftime('%d/%m/%Y %H:%M:%S')
+                datetime.datetime.fromtimestamp(meta_data['session_start']).strftime('%d/%m/%Y %H:%M:%S'),
+                self.C.officer_bonus_percentage, #todo: put this next to meta_data['officer_bonus']
             ],  # session global params
             meta_data['group_id'],
             meta_data['officer_bonus'],
@@ -558,10 +562,10 @@ class GenerateCsv:
         return result
 
 
-    def format_intersection(self, token_number, culprit_id, steal_token_id, intersection_map, guilty_player_id, audit, reprimanded):
+    def format_intersection(self, token_number, culprit_id, steal_token_id, intersection_map, guilty_player_id, audit, reprimanded, officer_bonus):
         """ for now culprit_id and steal_token_id are the same """
-        return "[{}, {}, {}, {}, {}, {}, {}]".format(token_number, culprit_id, steal_token_id, intersection_map,
-                                                    guilty_player_id, audit, reprimanded)
+        return "[{}, {}, {}, {}, {}, {}, {}, {}]".format(token_number, culprit_id, steal_token_id, intersection_map,
+                                                    guilty_player_id, audit, reprimanded, officer_bonus)
 
 
     def format_intersections(self, i_list):

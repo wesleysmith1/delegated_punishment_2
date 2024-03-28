@@ -37,7 +37,8 @@ class C(BaseConstants):
     officer_reprimand_amount = [m,m,m,m,m,m,m,m,m,m,m,m]
 
     """Officer income (bonus). One for each group"""
-    officer_income = 50
+    officer_income = 9000
+    officer_bonus_percentage = .5
 
     """ 
     this is the size of the tokens and maps are defined. 
@@ -100,7 +101,7 @@ class Group(BaseGroup):
     officer_bonus = models.IntegerField(initial=0)
 
     # counters
-    officer_bonus_total = models.IntegerField(initial=0)
+    officer_bonus_total = models.FloatField(initial=0)
     civilian_fine_total = models.IntegerField(initial=0)
     officer_reprimand_total = models.IntegerField(initial=0)
     intercept_total = models.IntegerField(initial=0)
@@ -283,8 +284,10 @@ class Player(BasePlayer):
     def civilian_harvest(self):
         self.balance += self.income
 
-    def officer_bonus(self):
-        self.balance += self.income
+    def officer_bonus(self, victim):
+        officer_bonus = victim.balance * C.officer_bonus_percentage
+        self.balance += officer_bonus
+        return officer_bonus
 
     def officer_reprimand(self):
         self.balance -= self.group.officer_reprimand_amount
@@ -1006,7 +1009,7 @@ class Main(Page):
                         officer = player
                     else:
                         officer = player.group.get_player_by_id(1)
-                    officer.officer_bonus()
+                    officer_bonus = officer.officer_bonus(player.group.get_player_by_id(innocent))
 
                     # increment counter
                     officer_bonus += 1
@@ -1031,7 +1034,7 @@ class Main(Page):
                         "audit": str(audit),
 
                         # notification log info
-                        "officer_bonus": officer.income,
+                        "officer_bonus": officer_bonus,
                         "officer_reprimand": officer_reprimand,
                     })
 
