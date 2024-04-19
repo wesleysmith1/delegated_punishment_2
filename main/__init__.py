@@ -24,7 +24,8 @@ class C(BaseConstants):
     """Fine when convicted"""
     civilian_fine_amount = 120
     """number of grain earned per second of stealing"""
-    civilian_steal_rate = 16
+    # civilian_steal_rate = 16
+    civilian_steal_rate = .01
 
     """Probability that an intersection outcome will be reviewed"""
     officer_review_probability = .25
@@ -37,7 +38,12 @@ class C(BaseConstants):
     officer_reprimand_amount = [m,m,m,m,m,m,m,m,m,m,m,m]
 
     """Officer income (bonus). One for each group"""
+<<<<<<< Updated upstream
     officer_income = 50
+=======
+    officer_income = 9000 # separate this out for treatments.
+    officer_bonus_percentage = .025
+>>>>>>> Stashed changes
 
     """ 
     this is the size of the tokens and maps are defined. 
@@ -72,6 +78,11 @@ class C(BaseConstants):
     steal_token_slots = 20
 
     officer_start_balance = 2000
+<<<<<<< Updated upstream
+=======
+    # civilian_start_balance = 1400
+    
+>>>>>>> Stashed changes
     civilian_start_balances = [1500, 1500, 2000, 2500, 2500]
 
         # probability calculations
@@ -217,6 +228,10 @@ class Player(BasePlayer):
     map = models.IntegerField(initial=0)
     last_updated = models.FloatField(blank=True)
     roi = models.IntegerField(initial=0)
+<<<<<<< Updated upstream
+=======
+    steal_roi = models.IntegerField(initial=0, doc="calculated from a percentage of victim balance")
+>>>>>>> Stashed changes
     balance = models.FloatField(initial=0)
     harvest_status = models.IntegerField(initial=0)
     harvest_screen = models.BooleanField(initial=True)
@@ -241,7 +256,7 @@ class Player(BasePlayer):
             seconds_passed = time - self.last_updated
             return self.balance + (self.roi * seconds_passed)
     
-    def increase_roi(self, time, direct):
+    def increase_roi(self, time, direct, rate):
         """
             direct argument determines which status count variable to update
         """
@@ -250,7 +265,8 @@ class Player(BasePlayer):
         self.last_updated = time
         # update roi
         # todo: why is this explicit conversion required here?
-        self.roi = int(self.roi + C.civilian_steal_rate)
+        # self.roi = int(self.roi + C.civilian_steal_rate)
+        self.roi = int(self.roi + rate)
 
         if direct:
             # victim no longer being stolen from by a player
@@ -260,13 +276,14 @@ class Player(BasePlayer):
             self.victim_count -= 1
 
 
-    def decrease_roi(self, time, direct):
+    def decrease_roi(self, time, direct, rate):
 
         # calculate balance
         self.balance = self.get_balance(time)
         self.last_updated = time
         # update roi
-        self.roi = int(self.roi - C.civilian_steal_rate)
+        # self.roi = int(self.roi - C.civilian_steal_rate)
+        self.roi = int(self.roi - rate)
 
         if direct:
             self.steal_count -= 1
@@ -345,7 +362,7 @@ def creating_session(subsession: Subsession):
     if subsession.round_number == 1:
         for index, group in enumerate(subsession.get_groups()):
             officer = group.get_player_by_id(1)
-            officer.participant.vars['officer_bonus'] = officer.income = C.officer_income
+            officer.participant.vars['officer_bonus'] = officer.income = C.officer_income # todo: this needs to be configurable for both treatments
 
             # save group id relative to session, not all groups in database
             officer.participant.vars['group_id'] = index+1
@@ -469,7 +486,7 @@ class Main(Page):
                 civilian_incomes=incomes_dict,
                 steal_rate=C.civilian_steal_rate,
                 civilian_fine=C.civilian_fine_amount,
-                officer_bonus=player.group.get_player_by_id(1).participant.vars['officer_bonus'],
+                officer_bonus=player.group.get_player_by_id(1).participant.vars['officer_bonus'], # todo: make sure that the officer bonus is dynamic here for treatments.
                 officer_reprimand=player.group.officer_reprimand_amount,
             )
         
@@ -546,17 +563,22 @@ class Main(Page):
                 })
                 
                 if player.map != 0:
+                    
+                    player.steal_roi = 0
+                    rate = player.steal_roi
+                    
                     victim = Player.group.get_player_by_id(id_in_group=player.map)
 
-                    victim.increase_roi(event_time, False)
+                    victim.increase_roi(event_time, False, rate)
 
                     game_data_dict.update({
                         "victim": victim.id_in_group,
                         "victim_roi": victim.roi,
                         "victim_balance": victim.balance,
+                        "rate": rate
                     })
 
-                    player.decrease_roi(event_time, True)
+                    player.decrease_roi(event_time, True, rate)
                 else:
                     pass
                 player.map = 0
@@ -632,8 +654,11 @@ class Main(Page):
             }
 
             victim = player.group.get_player_by_id(player.map)
+            
+            rate = player.steal_roi
+            player.steal_roi = 0
 
-            victim.increase_roi(event_time, False)
+            victim.increase_roi(event_time, False, rate)
 
             game_data_dict.update({
                 "victim": victim.id_in_group,
@@ -642,11 +667,12 @@ class Main(Page):
             })
 
             # update player roi
-            player.decrease_roi(event_time, True)
+            player.decrease_roi(event_time, True, rate)
 
             game_data_dict.update({
                 "player_roi": player.roi,
                 "player_balance": player.balance,
+                "rate": rate,
             })
 
             player.x = player.y = player.map = 0
@@ -670,18 +696,23 @@ class Main(Page):
             }
 
             if player.map > 0:
+                
+                rate = player.steal_roi
+                player.steal_roi = 0
+                
                 # update victim roi
                 victim = player.group.get_player_by_id(player.map)
-                victim.increase_roi(event_time, False)
+                victim.increase_roi(event_time, False, rate)
 
                 game_data_dict.update({
                     "victim": victim.id_in_group,
                     "victim_roi": victim.roi,
-                    "victim_balance": victim.balance
+                    "victim_balance": victim.balance,
+                    "rate": rate,
                 })
 
                 # update player roi
-                player.decrease_roi(event_time, True)
+                player.decrease_roi(event_time, True, rate)
 
                 game_data_dict.update({
                     "player_roi": player.roi,
@@ -824,12 +855,14 @@ class Main(Page):
                                 token.y <= p.y <= token.y2:
 
                             # update culprit
-                            p.decrease_roi(event_time, True)
+                            rate = p.steal_roi
+                            p.steal_roi = 0
+                            p.decrease_roi(event_time, True, rate)
 
                             # update victim
                             # map here represents the player id in group since they line up in every group/game
                             victim = player.group.get_player_by_id(p.map)
-                            victim.increase_roi(event_time, False)
+                            victim.increase_roi(event_time, False, rate)
 
                             # we do this here so we don't reset player data to -1 in which case the ui can't display intersection dots.
                             # create intersection data
@@ -849,7 +882,8 @@ class Main(Page):
                                 'token_y': token.y,
                                 'token_x2': token.x2,
                                 'token_y2': token.y2,
-                                'steal_reset': randomize_location()
+                                'steal_reset': randomize_location(),
+                                'rate': rate,
                             }
 
                             # update player info
@@ -919,22 +953,27 @@ class Main(Page):
 
                 # if there was no intersection -> update the roi of player and victim
                 if player.map != 0:
+                    
+                    # get victim object and update roi
+                    victim = player.group.get_player_by_id(player.map)
+                    
                     # update player roi
-                    player.increase_roi(event_time, True)
+                    rate = player.steal_roi = int(victim.balance * C.civilian_steal_rate)
+                    player.increase_roi(event_time, True, rate)
 
                     game_data_dict.update({
                         "culprit_roi": player.roi,
                         "culprit_balance": player.balance,
                     })
 
-                    # get victim object and update roi
-                    victim = player.group.get_player_by_id(player.map)
-                    victim.decrease_roi(event_time, False)
+                    # update victim roi
+                    victim.decrease_roi(event_time, False, rate)
 
                     game_data_dict.update({
                         "victim": victim.id_in_group,
                         "victim_roi": victim.roi,
-                        "victim_balance": victim.balance,
+                        "victim_balance": victim.balance,                        
+                        "rate": rate,
                     })
 
             num_investigators = len(DefendToken.filter(group=player.group, map=11))
@@ -1077,7 +1116,7 @@ class StartModal(Page):
 
         if player.round_number < 3:  # tutorial or practice round
             tut_civ_income = player.session.config['tutorial_civilian_income']
-            tut_o_bonus = player.session.config['tutorial_officer_bonus']
+            tut_o_bonus = player.session.config['tutorial_officer_bonus'] # todo: make sure this is dynamic for treatments!
 
             incomes = [tut_civ_income] * C.civilians_per_group
             incomes_dict = dict(zip(civilian_ids, incomes))
@@ -1087,7 +1126,7 @@ class StartModal(Page):
                 civilian_incomes=incomes_dict,
                 steal_rate=C.civilian_steal_rate,
                 civilian_fine=C.civilian_fine_amount,
-                officer_bonus=tut_o_bonus,
+                officer_bonus=tut_o_bonus, # todo: make sure this is dymanic for treatments
                 officer_reprimand=player.group.officer_reprimand_amount,
             )
         else:
@@ -1099,7 +1138,7 @@ class StartModal(Page):
                 civilian_incomes=incomes_dict,
                 steal_rate=C.civilian_steal_rate,
                 civilian_fine=C.civilian_fine_amount,
-                officer_bonus=player.group.get_player_by_id(1).participant.vars['officer_bonus'],
+                officer_bonus=player.group.get_player_by_id(1).participant.vars['officer_bonus'], # todo: make this dynamic. sometimes a percentage
                 officer_reprimand=player.group.officer_reprimand_amount,
             )
 
@@ -1177,13 +1216,13 @@ class Intermission(Page):
         if player.round_number < 3:  # tutorial or practice round
 
             tut_civ_income = player.session.config['tutorial_civilian_income']
-            tut_o_bonus = player.session.config['tutorial_officer_bonus']
+            tut_o_bonus = player.session.config['tutorial_officer_bonus'] # todo: make sure this is dynamic for treatments
 
             vars_dict = dict(
                 civilian_incomes=[tut_civ_income] * C.civilians_per_group,
                 steal_rate=C.civilian_steal_rate,
                 civilian_fine=C.civilian_fine_amount,
-                officer_bonus=tut_o_bonus,
+                officer_bonus=tut_o_bonus, # todo: make sure this is dynamic for treatments
                 officer_reprimand=player.group.officer_reprimand_amount,
             )
         else:
@@ -1191,12 +1230,12 @@ class Intermission(Page):
                 civilian_incomes=group_incomes,
                 steal_rate=C.civilian_steal_rate,
                 civilian_fine=C.civilian_fine_amount,
-                officer_bonus=player.group.get_player_by_id(1).participant.vars['officer_bonus'],
+                officer_bonus=player.group.get_player_by_id(1).participant.vars['officer_bonus'], # todo: make sure this is dynamic for treatments
                 officer_reprimand=player.group.officer_reprimand_amount,
             )
 
         if player.round_number == 2:
-            vars_dict['officer_bonus'] = player.session.config['tutorial_officer_bonus']
+            vars_dict['officer_bonus'] = player.session.config['tutorial_officer_bonus'] # todo: make sure this is dynamic for treatments
             info = 'We are about to perform a practice period to ensure everyone is familiar with the computer interface.'
         else:
             info = 'We are about to perform 4 rounds sequentially.'

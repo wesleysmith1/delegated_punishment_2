@@ -45,6 +45,7 @@ let resultsModalComponent = {
                         <div v-if="resultsObject.fines != null" class="list-group-item list-group-item-primary">
                             <div style="display: flex; justify-content: space-between;">
                                 <div>Amount earned ( <grain-image-component :size=20></grain-image-component>{{resultsObject.officer_bonus}} per civilian fined ):  </div>
+                                <div>Percentage earned per civilian fine</div>
                                 <div><grain-image-component :size=20></grain-image-component>{{ resultsObject.fines * income }}</div>
                             </div>
                         </div>

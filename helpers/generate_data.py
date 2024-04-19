@@ -95,11 +95,16 @@ class GenerateCsv:
 
                 # check if there was a victim & update
                 if data.get('victim'):
+
+                    # get player stealing rate
+                    rate = data['rate']
+                    player.steal_roi = 0
+                    
                     # update player into
                     victim_id = data['victim']
                     victim = players[victim_id]
-                    victim.increase_roi(event_time)
-                    player.decrease_roi(event_time)
+                    victim.increase_roi(event_time, rate)
+                    player.decrease_roi(event_time, rate)
 
                     victim.civilian_row(event_type, event_time)
 
@@ -124,12 +129,16 @@ class GenerateCsv:
                 player.steal_token.update(player_id, 0, 0, 'NA')
 
                 if data.get('victim'):
+                    
+                    player.steal_roi = 0
+                    rate = data['rate']
+                    
                     victim_id = data['victim']
                     victim = players[victim_id]
 
                     # update roi
-                    victim.increase_roi(event_time)
-                    player.decrease_roi(event_time)
+                    victim.increase_roi(event_time, rate)
+                    player.decrease_roi(event_time, rate)
 
                     # update victim data
                     victim.civilian_row(event_type, event_time, '0')
@@ -145,12 +154,15 @@ class GenerateCsv:
                 player.steal_token.update(player_id, data['steal_reset'], 0, 'NA')
 
                 if data.get('victim'):
+                    player.steal_roi = 0
+                    rate = data['rate']
+                    
                     victim_id = data['victim']
                     victim = players[victim_id]
 
                     # update roi
-                    victim.increase_roi(event_time)
-                    player.decrease_roi(event_time)
+                    victim.increase_roi(event_time, rate)
+                    player.decrease_roi(event_time, rate)
 
                     # update victim data
                     victim.civilian_row(event_type, event_time, '0')
@@ -240,8 +252,12 @@ class GenerateCsv:
                         if culprit_id not in updated_players:
                             updated_players.append(culprit_id)
 
-                        culprit.decrease_roi(event_time)
-                        victim.increase_roi(event_time)
+                        # update culprit roi
+                        culprit.steal_roi = 0
+                        rate = intersection['rate']
+
+                        culprit.decrease_roi(event_time, rate)
+                        victim.increase_roi(event_time, rate)
 
                         investigation = True if intersection.get('guilty') else False
 
@@ -266,7 +282,11 @@ class GenerateCsv:
                             officer.balance += intersection['officer_bonus']
 
                             i = self.format_intersection(token_number, culprit_id, steal_token_id, defend_map, guilty_id, audit,
+<<<<<<< Updated upstream
                                                     reprimanded)
+=======
+                                                    reprimanded, officer_bonus, rate)
+>>>>>>> Stashed changes
 
                             # wrongful conviction
                             if wrongful_conviction:
@@ -281,7 +301,11 @@ class GenerateCsv:
                                 culprit.balance -= self.C.civilian_fine_amount
 
                         else:
+<<<<<<< Updated upstream
                             i = self.format_intersection(token_number, culprit_id, steal_token_id, defend_map, 'NA', 0, 0)
+=======
+                            i = self.format_intersection(token_number, culprit_id, steal_token_id, defend_map, 'NA', 0, 0, 0, rate)
+>>>>>>> Stashed changes
 
                         # log.info("CULPRIT_ID: {}".format(culprit_id))
 
@@ -364,7 +388,13 @@ class GenerateCsv:
                             steal_map,
                             'NA' if guilty_id == 0 else guilty_id,
                             audit,
+<<<<<<< Updated upstream
                             reprimanded
+=======
+                            reprimanded,
+                            officer_bonus,
+                            0
+>>>>>>> Stashed changes
                         )
 
                         # if wrongful conviction
@@ -383,13 +413,19 @@ class GenerateCsv:
                             culprit.balance -= self.C.civilian_fine_amount
 
                     else:
+<<<<<<< Updated upstream
                         i = self.format_intersection(defend_token_number, culprit_id, steal_token_id, steal_map, 'NA', 0, 0)
+=======
+                        i = self.format_intersection(defend_token_number, culprit_id, steal_token_id, steal_map, 'NA', 0, 0, 0, 0)
+>>>>>>> Stashed changes
 
                     formatted_intersection = "[{}]".format(i)  # single intersection
 
                 else:
-                    culprit.increase_roi(event_time)
-                    victim.decrease_roi(event_time)
+                    rate = data['rate']
+                    culprit.steal_roi = rate
+                    culprit.increase_roi(event_time, rate)
+                    victim.decrease_roi(event_time, rate)
 
                 victim.civilian_row(event_type, event_time, punished='0')
 
@@ -479,6 +515,7 @@ class GenerateCsv:
             'Group_stealTechnology',
             'Player_HarvestAmount',
             'Group_ID_Description',
+            'steal_roi',
         ]
         return labels
 
@@ -497,7 +534,13 @@ class GenerateCsv:
                 self.C.civilian_map_size,
                 self.C.officer_reprimand_amount,
                 self.C.officer_review_probability,
+<<<<<<< Updated upstream
                 datetime.datetime.fromtimestamp(meta_data['session_start']).strftime('%d/%m/%Y %H:%M:%S')
+=======
+                datetime.datetime.fromtimestamp(meta_data['session_start']).strftime('%d/%m/%Y %H:%M:%S'),
+                self.C.officer_bonus_percentage, #todo: put this next to meta_data['officer_bonus'],
+                self.C.civilian_steal_rate,
+>>>>>>> Stashed changes
             ],  # session global params
             meta_data['group_id'],
             meta_data['officer_bonus'],
@@ -520,6 +563,7 @@ class GenerateCsv:
             'Constant',
             0 if pid == 1 else meta_data['income_distribution'][pid-2], #Player_HarvestAmount
             'Constant - M/H', #todo: make dynamic
+            r['steal_roi'], # todo: move this next to r['roi']
         ]
     
     def init_defend_tokens(self):
@@ -558,10 +602,17 @@ class GenerateCsv:
         return result
 
 
+<<<<<<< Updated upstream
     def format_intersection(self, token_number, culprit_id, steal_token_id, intersection_map, guilty_player_id, audit, reprimanded):
         """ for now culprit_id and steal_token_id are the same """
         return "[{}, {}, {}, {}, {}, {}, {}]".format(token_number, culprit_id, steal_token_id, intersection_map,
                                                     guilty_player_id, audit, reprimanded)
+=======
+    def format_intersection(self, token_number, culprit_id, steal_token_id, intersection_map, guilty_player_id, audit, reprimanded, officer_bonus, steal_roi):
+        """ for now culprit_id and steal_token_id are the same """
+        return "[{}, {}, {}, {}, {}, {}, {}, {}, {}]".format(token_number, culprit_id, steal_token_id, intersection_map,
+                                                    guilty_player_id, audit, reprimanded, officer_bonus, steal_roi)
+>>>>>>> Stashed changes
 
 
     def format_intersections(self, i_list):
@@ -600,9 +651,14 @@ class CPlayer:
         if self.player_id == 1:
             self.balance = self.C.officer_start_balance
         else:
+<<<<<<< Updated upstream
             self.balance = self.C.civilian_start_balances[self.player_id-2]
+=======
+            self.balance = self.C.civilian_start_balances[self.player_id - 2]
+>>>>>>> Stashed changes
 
         self.roi = 0
+        self.steal_roi = 0
         self.t_formatter = time_formatter
 
         # officer
@@ -626,6 +682,7 @@ class CPlayer:
             'event_time': self.t_formatter.format(event_time),
             'balance': self.update_balance(event_time),
             'roi': self.roi,
+            'steal_roi': self.steal_roi,
             'screen': self.screen,
             'steal_token': self.steal_token.format(),
             'production_inputs': self.production_inputs,
@@ -643,6 +700,7 @@ class CPlayer:
             'event_time': self.t_formatter.format(event_time),
             'balance': self.update_balance(event_time),
             'roi': self.roi,
+            'steal_roi': self.steal_roi,
             'screen': self.screen,
             'steal_token': 'NA',
             'production_inputs': self.production_inputs,
@@ -652,15 +710,17 @@ class CPlayer:
         }
         self.rows.append(row_data)
 
-    def increase_roi(self, event_time):
+    def increase_roi(self, event_time, rate):
         self.balance = self.update_balance(event_time)
         self.last_updated = event_time
-        self.roi += self.C.civilian_steal_rate
+        # self.roi += self.C.civilian_steal_rate
+        self.roi = int(self.roi + rate)
 
-    def decrease_roi(self, event_time):
+    def decrease_roi(self, event_time, rate):
         self.balance = self.update_balance(event_time)
         self.last_updated = event_time
-        self.roi -= self.C.civilian_steal_rate
+        # self.roi -= self.C.civilian_steal_rate
+        self.roi = int(self.roi - rate)
 
     def update_balance(self, event_time):
         # return calculated balance
