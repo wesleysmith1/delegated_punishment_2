@@ -974,9 +974,6 @@ class Main(Page):
                 # subtract 1 for 0 based index
                 multi[culprit - 1] = guilty_prob
                 multi[innocent - 1] = 0
-                
-                print(f"multi: {multi}")
-                print(f"sum of multi: {sum(multi)}")
 
                 result = np.random.multinomial(1, multi, 1)[0]
 
