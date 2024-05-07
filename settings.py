@@ -12,7 +12,6 @@ SESSION_CONFIGS = [
         civilian_income_low_to_high=True,
         civilian_income_config=1,
         tutorial_civilian_income=27,
-        tutorial_officer_bonus=50,
         tutorial_start_balance=2000,
         session_identifier=0,
         balance_update_rate=100,
@@ -26,7 +25,6 @@ SESSION_CONFIGS = [
         civilian_income_low_to_high=True,
         civilian_income_config=1,
         tutorial_civilian_income=20,
-        tutorial_officer_bonus=50,
         session_identifier=0,
         balance_update_rate=100,
     )

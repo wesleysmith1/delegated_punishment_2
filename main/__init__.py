@@ -381,7 +381,7 @@ def creating_session(subsession: Subsession):
                         p.income = p.session.config['tutorial_civilian_income']
                         p.balance = subsession.session.config['tutorial_start_balance']
                     else:
-                        p.income = p.session.config['tutorial_officer_bonus']
+                        p.income = int(C.officer_bonus_percentage*100)
                         p.balance = C.officer_start_balance
                 else:
                     # set harvest amount for civilians
@@ -450,7 +450,7 @@ class Main(Page):
         
         if player.round_number < 3:  # tutorial or practice round
             tut_civ_income = player.session.config['tutorial_civilian_income']
-            tut_o_bonus = player.session.config['tutorial_officer_bonus']
+            tut_o_bonus = int(C.officer_bonus_percentage*100)
 
             incomes = [tut_civ_income] * C.civilians_per_group
             incomes_dict = dict(zip(civilian_ids, incomes))
@@ -1080,7 +1080,7 @@ class StartModal(Page):
 
         if player.round_number < 3:  # tutorial or practice round
             tut_civ_income = player.session.config['tutorial_civilian_income']
-            tut_o_bonus = player.session.config['tutorial_officer_bonus']
+            tut_o_bonus = int(C.officer_bonus_percentage*100)
 
             incomes = [tut_civ_income] * C.civilians_per_group
             incomes_dict = dict(zip(civilian_ids, incomes))
@@ -1102,7 +1102,7 @@ class StartModal(Page):
                 civilian_incomes=incomes_dict,
                 steal_rate=C.civilian_steal_rate,
                 civilian_fine=C.civilian_fine_amount,
-                officer_bonus=player.group.get_player_by_id(1).participant.vars['officer_bonus'],
+                officer_bonus=int(C.officer_bonus_percentage*100),
                 officer_reprimand=player.group.officer_reprimand_amount,
             )
 
@@ -1180,7 +1180,7 @@ class Intermission(Page):
         if player.round_number < 3:  # tutorial or practice round
 
             tut_civ_income = player.session.config['tutorial_civilian_income']
-            tut_o_bonus = player.session.config['tutorial_officer_bonus']
+            tut_o_bonus = int(C.officer_bonus_percentage*100)
 
             vars_dict = dict(
                 civilian_incomes=[tut_civ_income] * C.civilians_per_group,
@@ -1199,7 +1199,7 @@ class Intermission(Page):
             )
 
         if player.round_number == 2:
-            vars_dict['officer_bonus'] = player.session.config['tutorial_officer_bonus']
+            vars_dict['officer_bonus'] = int(C.officer_bonus_percentage*100)
             info = 'We are about to perform a practice period to ensure everyone is familiar with the computer interface.'
         else:
             info = 'We are about to perform 4 rounds sequentially.'

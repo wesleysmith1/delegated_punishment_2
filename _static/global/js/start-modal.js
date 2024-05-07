@@ -51,8 +51,8 @@ let startModalComponent = {
                         <div class="list-group" style="width: 450px; margin: auto;">
                              <div class="list-group-item">
                                 <div style="display: flex; justify-content: space-between;">
-                                    <div>Officer earnings per civilian fine </div>
-                                    <div :style=officerItem><grain-image-component :size=20></grain-image-component>{{startObject.officer_bonus}}</div>
+                                    <div>Officer earnings percentage per civilian fine </div>
+                                    <div :style=officerItem>{{startObject.officer_bonus}}%</div>
                                 </div>
                             </div>
                             <div class="list-group-item">
