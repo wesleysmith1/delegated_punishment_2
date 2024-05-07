@@ -282,7 +282,7 @@ class GenerateCsv:
                             officer.balance += intersection['officer_bonus']
 
                             i = self.format_intersection(token_number, culprit_id, steal_token_id, defend_map, guilty_id, audit,
-                                                    reprimanded, intersection['officer_bonus'], rate)
+                                                    reprimanded, intersection['officer_bonus'])
 
                             # wrongful conviction
                             if wrongful_conviction:
@@ -298,7 +298,7 @@ class GenerateCsv:
 
                         else:
 
-                            i = self.format_intersection(token_number, culprit_id, steal_token_id, defend_map, 'NA', 0, 0, 0, rate)
+                            i = self.format_intersection(token_number, culprit_id, steal_token_id, defend_map, 'NA', 0, 0,)
 
                         # log.info("CULPRIT_ID: {}".format(culprit_id))
 
@@ -383,7 +383,6 @@ class GenerateCsv:
                             audit,
                             reprimanded,
                             officer_bonus,
-                            0
                         )
 
                         # if wrongful conviction
@@ -402,7 +401,7 @@ class GenerateCsv:
                             culprit.balance -= self.C.civilian_fine_amount
 
                     else:
-                        i = self.format_intersection(defend_token_number, culprit_id, steal_token_id, steal_map, 'NA', 0, 0, 0, 0)
+                        i = self.format_intersection(defend_token_number, culprit_id, steal_token_id, steal_map, 'NA', 0, 0, 0)
 
                     formatted_intersection = "[{}]".format(i)  # single intersection
 
@@ -585,10 +584,10 @@ class GenerateCsv:
         return result
 
 
-    def format_intersection(self, token_number, culprit_id, steal_token_id, intersection_map, guilty_player_id, audit, reprimanded, officer_bonus, steal_roi):
+    def format_intersection(self, token_number, culprit_id, steal_token_id, intersection_map, guilty_player_id, audit, reprimanded, officer_bonus):
         """ for now culprit_id and steal_token_id are the same """
-        return "[{}, {}, {}, {}, {}, {}, {}, {}, {}]".format(token_number, culprit_id, steal_token_id, intersection_map,
-                                                    guilty_player_id, audit, reprimanded, officer_bonus, steal_roi)
+        return "[{}, {}, {}, {}, {}, {}, {}, {}]".format(token_number, culprit_id, steal_token_id, intersection_map,
+                                                    guilty_player_id, audit, reprimanded, officer_bonus)
 
 
     def format_intersections(self, i_list):
