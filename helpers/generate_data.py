@@ -482,6 +482,7 @@ class GenerateCsv:
             'Group_stealTechnology',
             'Player_HarvestAmount',
             'Group_ID_Description',
+            'Group_bonusTechnology',
         ]
         return labels
 
@@ -521,9 +522,10 @@ class GenerateCsv:
             r['intersection_events'],
             meta_data['group_pk'],
             meta_data['reprimand'], #Group_ReprimandAmount, #Group_ReprimandAmount,
-            'Constant',
+            'Constant-16', # Group steal technology
             0 if pid == 1 else meta_data['income_distribution'][pid-2], #Player_HarvestAmount
             'Constant - M/H', #todo: make dynamic
+            'WealthPercent-2' # group bonus technology
         ]
     
     def init_defend_tokens(self):
