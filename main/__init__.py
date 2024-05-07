@@ -38,12 +38,8 @@ class C(BaseConstants):
     officer_reprimand_amount = [m,m,m,m,m,m,m,m,m,m,m,m]
 
     """Officer income (bonus). One for each group"""
-<<<<<<< Updated upstream
     officer_income = 50
-=======
-    officer_income = 9000 # separate this out for treatments.
     officer_bonus_percentage = .025
->>>>>>> Stashed changes
 
     """ 
     this is the size of the tokens and maps are defined. 
@@ -78,11 +74,7 @@ class C(BaseConstants):
     steal_token_slots = 20
 
     officer_start_balance = 2000
-<<<<<<< Updated upstream
-=======
-    # civilian_start_balance = 1400
     
->>>>>>> Stashed changes
     civilian_start_balances = [1500, 1500, 2000, 2500, 2500]
 
         # probability calculations
@@ -90,14 +82,14 @@ class C(BaseConstants):
     # the index
     calculated_probabilities = [
         (.24, .24, .04), # 0 defense tokens tokens
-        (.33, .21, .04), # 1 defense ...
-        (.42, .18, .04), # 2 ...
-        (.51, .15, .04), # 3 ...
-        (.60, .12, .04), # 4 ...
-        (.69, .09, .04), # 5 ...
-        (.78, .06, .04), # 6 ...
-        (.87, .03, .04), # 7 ...
-        (.96, .0, .04), # 8 ...
+        (.21, .33, .04), # 1 defense ...
+        (.18, .42, .04), # 2 ...
+        (.15, .51, .04), # 3 ...
+        (.12, .60, .04), # 4 ...
+        (.09, .69, .04), # 5 ...
+        (.06, .78, .04), # 6 ...
+        (.03, .87, .04), # 7 ...
+        (.0, .96, .04), # 8 ...
     ]
 
 
@@ -228,10 +220,7 @@ class Player(BasePlayer):
     map = models.IntegerField(initial=0)
     last_updated = models.FloatField(blank=True)
     roi = models.IntegerField(initial=0)
-<<<<<<< Updated upstream
-=======
     steal_roi = models.IntegerField(initial=0, doc="calculated from a percentage of victim balance")
->>>>>>> Stashed changes
     balance = models.FloatField(initial=0)
     harvest_status = models.IntegerField(initial=0)
     harvest_screen = models.BooleanField(initial=True)
