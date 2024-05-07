@@ -1069,7 +1069,6 @@ class StartModal(Page):
     def vars_for_template(player: Player):
         # income configuration number
         config_key = player.session.config['civilian_income_config']
-        lth = player.session.config['civilian_income_low_to_high']
 
         civilian_ids = [x + C.PLAYERS_PER_GROUP - C.civilians_per_group for x in
                range(1, C.PLAYERS_PER_GROUP + 1)]
