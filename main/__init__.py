@@ -476,7 +476,7 @@ class Main(Page):
                 civilian_incomes=incomes_dict,
                 steal_rate=C.civilian_steal_rate,
                 civilian_fine=C.civilian_fine_amount,
-                officer_bonus=player.group.get_player_by_id(1).participant.vars['officer_bonus'], # todo: make sure that the officer bonus is dynamic here for treatments.
+                officer_bonus=int(C.officer_bonus_percentage*100),
                 officer_reprimand=player.group.officer_reprimand_amount,
             )
         
@@ -1219,7 +1219,7 @@ class Intermission(Page):
                 civilian_incomes=group_incomes,
                 steal_rate=C.civilian_steal_rate,
                 civilian_fine=C.civilian_fine_amount,
-                officer_bonus=player.group.get_player_by_id(1).participant.vars['officer_bonus'], # todo: make sure this is dynamic for treatments
+                officer_bonus=int(C.officer_bonus_percentage*100),
                 officer_reprimand=player.group.officer_reprimand_amount,
             )
 
@@ -1237,7 +1237,7 @@ class Intermission(Page):
 
 class AfterTrialAdvancePage(Page):
     def is_displayed(self):
-        if self.round_number == 2 or self.round_number == 7:
+        if self.round_number == 2:
             return True
 
         return False
