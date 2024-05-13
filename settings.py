@@ -8,8 +8,7 @@ SESSION_CONFIGS = [
         app_sequence=['welcome', 'main', 'survey_payment'],
         num_demo_participants=6,
         showup_payment=7,
-        grain_conversion=.011111,
-        civilian_income_low_to_high=True,
+        grain_conversion=.01,
         civilian_income_config=1,
         tutorial_civilian_income=27,
         tutorial_start_balance=2000,
@@ -21,8 +20,7 @@ SESSION_CONFIGS = [
         app_sequence=['survey_payment'],
         num_demo_participants=1,
         showup_payment=7,
-        grain_conversion=.011111,
-        civilian_income_low_to_high=True,
+        grain_conversion=.01,
         civilian_income_config=1,
         tutorial_civilian_income=20,
         session_identifier=0,
@@ -48,7 +46,7 @@ LANGUAGE_CODE = 'en'
 
 # e.g. EUR, GBP, CNY, JPY
 REAL_WORLD_CURRENCY_CODE = 'USD'
-USE_POINTS = True
+USE_POINTS = False
 
 ROOMS = [
     dict(
