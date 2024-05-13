@@ -37,7 +37,6 @@ let resultsModalComponent = {
     
                 </div>
                 <br>
-                
 
             </div>
             

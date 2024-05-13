@@ -546,6 +546,7 @@ class GenerateCsv:
             'Constant - M/H', #todo: make dynamic
             r['steal_roi'], # todo: move this next to r['roi']
             'Constant-50' # group bonus technology
+
         ]
     
     def init_defend_tokens(self):

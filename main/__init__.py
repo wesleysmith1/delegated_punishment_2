@@ -446,7 +446,6 @@ class Main(Page):
         defend_tokens = results = [obj.to_dict() for obj in officer_tokens]
 
         config_key = player.session.config['civilian_income_config']
-        low_to_high = player.session.config['civilian_income_low_to_high']
 
         civilian_ids = [x + C.PLAYERS_PER_GROUP - C.civilians_per_group for x in
             range(1, C.PLAYERS_PER_GROUP + 1)]
@@ -1098,7 +1097,6 @@ class StartModal(Page):
     def vars_for_template(player: Player):
         # income configuration number
         config_key = player.session.config['civilian_income_config']
-        lth = player.session.config['civilian_income_low_to_high']
 
         civilian_ids = [x + C.PLAYERS_PER_GROUP - C.civilians_per_group for x in
                range(1, C.PLAYERS_PER_GROUP + 1)]
@@ -1191,7 +1189,7 @@ class Intermission(Page):
     @staticmethod
     def is_displayed(player: Player):
 
-        if C.NUM_ROUNDS > 1 and (player.round_number == 2 or player.round_number == 3 or player.round_number == 8):
+        if C.NUM_ROUNDS > 1 and (player.round_number == 2 or player.round_number == 3):
             return True
         else:
             return False
@@ -1227,7 +1225,7 @@ class Intermission(Page):
             vars_dict['officer_bonus'] = player.session.config['tutorial_officer_bonus'] # todo: make sure this is dynamic for treatments
             info = 'We are about to perform a practice period to ensure everyone is familiar with the computer interface.'
         else:
-            info = 'We are about to perform 4 rounds sequentially.'
+            info = 'We are about to perform 10 rounds sequentially.'
 
         vars_dict['info'] = info
         vars_dict['officer_review_probability'] = C.officer_review_probability*100
