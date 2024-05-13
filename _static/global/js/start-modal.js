@@ -52,7 +52,6 @@ let startModalComponent = {
                              <div class="list-group-item">
                                 <div style="display: flex; justify-content: space-between;">
                                     <div>Officer earnings per civilian fine </div>
-                                    <div>Percentage Officer earns when a civilian is fined</div>
                                     <div :style=officerItem><grain-image-component :size=20></grain-image-component>{{startObject.officer_bonus}}</div>
                                 </div>
                             </div>
@@ -70,9 +69,8 @@ let startModalComponent = {
                             </div>
                             <div class="list-group-item">
                                 <div style="display: flex; justify-content: space-between;">
-                                    <div>Civilian steal rate </div>
-                                    <div>Percentage stolen</div>
-                                    <div :style="civilianItem"><grain-image-component :size=20></grain-image-component>{{ startObject.steal_rate }}</div>
+                                    <div>Percentage stolen per second</div>
+                                    <div :style="civilianItem">{{ startObject.steal_rate }}%</div>
                                 </div>
                             </div>
                             <div class="list-group-item">

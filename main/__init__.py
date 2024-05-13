@@ -1113,7 +1113,7 @@ class StartModal(Page):
 
             start_modal_object = dict(
                 civilian_incomes=incomes_dict,
-                steal_rate=C.civilian_steal_rate,
+                steal_rate=int(C.civilian_steal_rate*100),
                 civilian_fine=C.civilian_fine_amount,
                 officer_bonus=tut_o_bonus, # todo: make sure this is dymanic for treatments
                 officer_reprimand=player.group.officer_reprimand_amount,
@@ -1125,7 +1125,7 @@ class StartModal(Page):
 
             start_modal_object = dict(
                 civilian_incomes=incomes_dict,
-                steal_rate=C.civilian_steal_rate,
+                steal_rate=int(C.civilian_steal_rate*100),
                 civilian_fine=C.civilian_fine_amount,
                 officer_bonus=player.group.get_player_by_id(1).participant.vars['officer_bonus'], # todo: make this dynamic. sometimes a percentage
                 officer_reprimand=player.group.officer_reprimand_amount,

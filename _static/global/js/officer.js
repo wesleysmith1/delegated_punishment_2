@@ -179,7 +179,6 @@ let officerGameComponent = {
                         <div class="title-small officer-info-container">
                             <div class="title-small data-row">
                                 <div class="left">Amount earned per fine: </div>
-                                <div class="left">Percentage of victim's balance earned per fine: </div>
                                 <div class="right green-txt bold-txt"><div class="number-right-align"><grain-image-component :size=35 color="green"></grain-image-component>{{officerIncome}}</div></div>
                             </div>
                         </div>
