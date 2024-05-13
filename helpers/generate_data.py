@@ -526,6 +526,7 @@ class GenerateCsv:
             0 if pid == 1 else meta_data['income_distribution'][pid-2], #Player_HarvestAmount
             'Constant - M/H', #todo: make dynamic
             'WealthPercent-2' # group bonus technology
+
         ]
     
     def init_defend_tokens(self):
