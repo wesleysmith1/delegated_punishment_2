@@ -459,7 +459,6 @@ class GenerateCsv:
             'Session_ID',
             'Session_GlobalParameters',
             'Group_ID',
-            'Group_BonusAmount',
             'Group_IncomeDistribution',
             'Player_ID',
             'Participant_ID',  # participant.id_in_session
@@ -500,7 +499,6 @@ class GenerateCsv:
                 datetime.datetime.fromtimestamp(meta_data['session_start']).strftime('%d/%m/%Y %H:%M:%S')
             ],  # session global params
             meta_data['group_id'],
-            meta_data['officer_bonus'],
             meta_data['income_distribution'],  # group_income_distribution
             pid,
             id_in_session,  # participant_id
