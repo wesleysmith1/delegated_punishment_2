@@ -479,7 +479,6 @@ class GenerateCsv:
             'Session_ID',
             'Session_GlobalParameters',
             'Group_ID',
-            'Group_BonusAmount',
             'Group_IncomeDistribution',
             'Player_ID',
             'Participant_ID',  # participant.id_in_session
@@ -524,7 +523,6 @@ class GenerateCsv:
                 self.C.civilian_steal_rate,
             ],  # session global params
             meta_data['group_id'],
-            meta_data['officer_bonus'],
             meta_data['income_distribution'],  # group_income_distribution
             pid,
             id_in_session,  # participant_id
@@ -541,7 +539,7 @@ class GenerateCsv:
             r['intersection_events'],
             meta_data['group_pk'],
             meta_data['reprimand'], #Group_ReprimandAmount, #Group_ReprimandAmount,
-            'Dynamic-01',
+            'WealthPercent-01',
             0 if pid == 1 else meta_data['income_distribution'][pid-2], #Player_HarvestAmount
             'Constant - M/H', #todo: make dynamic
             r['steal_roi'], # todo: move this next to r['roi']
