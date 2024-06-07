@@ -462,7 +462,6 @@ class GenerateCsv:
             'Session_ID',
             'Session_GlobalParameters',
             'Group_ID',
-            'Group_BonusAmount',
             'Group_IncomeDistribution',
             'Player_ID',
             'Participant_ID',  # participant.id_in_session
@@ -505,7 +504,6 @@ class GenerateCsv:
                 self.C.officer_bonus_percentage, #todo: put this next to meta_data['officer_bonus']
             ],  # session global params
             meta_data['group_id'],
-            meta_data['officer_bonus'],
             meta_data['income_distribution'],  # group_income_distribution
             pid,
             id_in_session,  # participant_id
