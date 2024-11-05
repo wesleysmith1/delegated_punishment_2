@@ -45,8 +45,7 @@ class C(BaseConstants):
     defend_token_size = 150
     civilian_map_size = 200 * 1.5
 
-    """Probability innocent and guilty are calculated when the number of investigation tokens is >= this number"""
-    a_max = 6
+    
     """todo: label this correctly... find out where this is from and why it is needed...."""
     beta = 18
     """
@@ -84,11 +83,13 @@ class C(BaseConstants):
         (.15, .51, .04), # 3 ...
         (.12, .60, .04), # 4 ...
         (.09, .69, .04), # 5 ...
-        (1, 0, 0), # 6 .06, .78, .04...
-        (1, 0, 0), # 7 ....03, .87, .04
-        (1, 0, 0), # 8 ....0, .96, .04
+        (.06,.78,.04), # 6 
+        (.03,.87,.04), # 7 ...
+        (0,.096,.04), # 8 ...
     ]
-
+"""Probability innocent and guilty are calculated when the number of investigation tokens is >= this number"""
+    a_max=defend_token_total
+    prob_a_max=.8
 
 class Subsession(BaseSubsession):
     pass
@@ -957,7 +958,8 @@ class Main(Page):
                 if num_investigators >= C.a_max:
                     innocent_prob = 0
                     # get largest probability since they are all the same after 6 tokens
-                    guilty_prob = C.calculated_probabilities[-1][1]
+                    #guilty_prob = C.calculated_probabilities[-1][1]
+                    guilty_prob = C.prob_a_max
                 else:
                     innocent_prob = C.calculated_probabilities[num_investigators][0]
 
