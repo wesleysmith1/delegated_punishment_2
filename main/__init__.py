@@ -73,7 +73,7 @@ class C(BaseConstants):
     officer_start_balance = 2000
     civilian_start_balances = [1500, 1500, 2000, 2500, 2500]
 
-        # probability calculations
+    # probability calculations
     # key=#probabilities -> innocent, culprit, prob nobody
     # the index
     calculated_probabilities = [
@@ -87,7 +87,7 @@ class C(BaseConstants):
         (.03,.87,.04), # 7 ...
         (0,.096,.04), # 8 ...
     ]
-"""Probability innocent and guilty are calculated when the number of investigation tokens is >= this number"""
+    """Probability innocent and guilty are calculated when the number of investigation tokens is >= this number"""
     a_max=defend_token_total
     prob_a_max=.8
 
