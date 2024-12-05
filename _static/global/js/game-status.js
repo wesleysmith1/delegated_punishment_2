@@ -14,8 +14,6 @@ let gameStatusComponent = {
         investigationCount: Number,
         defendTokenTotal: Number,
         isOfficer: Boolean,
-        aMax: Number,
-        beta: Number,
         reviewProbability: Number,
     },
     data: function () {
@@ -35,17 +33,8 @@ let gameStatusComponent = {
     computed: {
         probabilityCulprit() {
 
-            // todo do we need the amax thing anymore?
             return this.probCulprit[this.investigationCount]
 
-            if (this.investigationCount > this.aMax)
-                return 90;
-            else {
-                // let guilty = this.beta * (1/(this.civiliansPerGroup - 1) + ((this.civiliansPerGroup - 2) / (this.civiliansPerGroup - 1) * (this.investigationCount/this.aMax)))
-                let guilty = this.beta + this.investigationCount * 12
-                return guilty
-                // return Math.round(guilty*10000) / 100
-            }
         },
         probabilityInnocent() {
             let innocent = this.probInnocent[this.investigationCount]
@@ -56,22 +45,7 @@ let gameStatusComponent = {
                 this.$emit('update-probability-reprimand', probabilityReprimand)
             }
             return innocent
-            // if (this.investigationCount > this.aMax)
-            //     return 0;
-            // else {
-            //     // let innocent = this.beta * ((1/(this.civiliansPerGroup -1) - (1/(this.civiliansPerGroup -1)) * (this.investigationCount/this.aMax)))
 
-            //     // let innocent = this.beta - this.investigationCount * 3
-            //     let innocent = this.probInnocent[this.investigationCount]
-
-            //     // calculate probability of officer reprimand because it depends on probability innocent
-            //     if (this.isOfficer) {
-            //         let probabilityReprimand = Math.round(this.reviewProbability * 3 * innocent * 10000) / 100
-            //         this.$emit('update-probability-reprimand', probabilityReprimand)
-            //     }
-            //     return innocent
-            //     // return Math.round(innocent*10000) / 100
-            // }
         },
     },
     template:

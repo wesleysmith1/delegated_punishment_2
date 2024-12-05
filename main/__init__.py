@@ -46,8 +46,7 @@ class C(BaseConstants):
     civilian_map_size = 200 * 1.5
 
     
-    """todo: label this correctly... find out where this is from and why it is needed...."""
-    beta = 18
+    
     """
     Tutorial, game and results modal durations are defined here and passed to frontend
     """
@@ -87,9 +86,6 @@ class C(BaseConstants):
         (.03,.87,.04), # 7 ...
         (0,.096,.04), # 8 ...
     ]
-    """Probability innocent and guilty are calculated when the number of investigation tokens is >= this number"""
-    a_max=defend_token_total
-    prob_a_max=.8
 
 class Subsession(BaseSubsession):
     pass
@@ -955,15 +951,10 @@ class Main(Page):
                 # probability no player player convicted
                 probability_none = C.calculated_probabilities[num_investigators][2]
 
-                if num_investigators >= C.a_max:
-                    innocent_prob = 0
-                    # get largest probability since they are all the same after 6 tokens
-                    #guilty_prob = C.calculated_probabilities[-1][1]
-                    guilty_prob = C.prob_a_max
-                else:
-                    innocent_prob = C.calculated_probabilities[num_investigators][0]
 
-                    guilty_prob = C.calculated_probabilities[num_investigators][1]
+                innocent_prob = C.calculated_probabilities[num_investigators][0]
+
+                guilty_prob = C.calculated_probabilities[num_investigators][1]
 
 
                 # todo: this should be dynamic or documented that it is tied to num_civilians

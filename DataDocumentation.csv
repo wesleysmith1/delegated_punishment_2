@@ -1,0 +1,55 @@
+Variable Name,Description,Officer Example 1,Issues and Questions (denoted ! and ?)
+EventType,Type of event,defend_token_update,
+Session_ID,O-tree ID of session,1,
+Group_PK,O-tree ID of group “Group Primary Key”,,
+Group_ID,O-tree ID of group within session,,
+Participant_ID,O-tree ID of participant,,
+Period_ID,Period of play within the experiment,3,
+Period_CurrentTime,Current time within the period,1:23.23243,
+Session_GlobalParameters,"A vector of various other parameters used in the software:
+    stealing fine, 
+    probability function abar parameters,
+    token dimensions,
+    map dimensions,
+    reprimand probability,
+    session start time","[16, 120, 8, 'a min 1 , a max 10', 150, 300.0, [200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200], 0.25, '05/08/2024 22:06:47', 0.02]",?What do all of the entries mean? 
+Player_ID,Number indicating player within the session (players 1...5) **constant throughout the game,4,
+Player_Role,"Civilian=1, Officer=0, Generic-Civilian=NA",0,
+Player_ROI,"Current rate of increase, Generic-Civilian=NA",0,
+Player_Balance,"Current balance in the period, Generic-Civilian=NA",57,
+Player_Screen,Produce=1 or Steal=0,0,
+Player_StealToken,"Vector of attributes for the steal token:
+    token number,
+    x location within map,
+    y location within map,
+    which map =(0 if at starting location, 1 if stealing from 1,…, NA if in motion)
+If map=0, then y location is 0 and x location indicates a ‘’position’’ from 1...20",NA,
+Player_ProductionInputs,"Stage of the production process in (number of boxes pulled down = 0,1,2,3,4,NA)",NA,
+Player_Punished,"1=if this player was punished at this event, 0=not, NA = not applicable",NA,
+Player_DefendTokens,"Vector of attributes for the defend tokens:
+    token number,
+    x1 location within map,
+    y1 location within map,
+    x2 location within map,
+    y2 location within map,
+    Which map =(-1 if on punishment map, 0/NA if at starting location?, 1 if stealing from 1,…)
+?If map=0, then y location is 0 and x location indicates a ‘’position’’ from 1...20?","[[1, 0, 0, 0, 0, -1];[2, 0, 0, 0, 0, -1];[3, 0, 0, 0, 0, -1];[4, 0, 0, 0, 0, -1];[5, 0, 0, 0, 0, -1];[6, 0, 0, 0, 0, -1];[7, -1.53125, 154.5, 148.46875, 304.5, 6];[8, -11.265625, 151.5, 138.734375, 301.5, 2];]","?If map=0, then y location is 0 and x location indicates a ‘’position’’ from 1...20?"
+Player_HarvestAmount,,22,
+Group_PunishmentEvents,"Vectors associated with the interrupted defense token:
+    Defend Token ID =(1 if token 1, ..., 9 if token 9),
+    Culprit Player ID=(2 if player 2 was interrupted, 3 if player 3 ...),
+    Culprit Token ID= Culprit Player ID,
+    Map=(2 if intercept on map 2, ..., 6 if intercept on map 6),
+    Punished Player ID=(NA if none, 1 if player 1 was punished, 2 if player 2 ...),
+    Officer Audit=(1 if officer investigated),
+    Officer Reprimanded=(1=yes, 0=not),
+    Officer Bonus= Amount of money received (% of wealth on Map, or fixed payment)
+!Officer Bonus is missing when both Group_stealTechnology=""Constant"" and Group_bonusTechnology=""Constant""!","[[6, 3, 1, 2, NA, 0, 0]]","!Officer Bonus is missing when both Group_stealTechnology=""Constant"" and Group_bonusTechnology=""Constant""!"
+Group_ReprimandTechnology,Officer Treatment: Constant-50,5,
+Group_BonusTechnology,Officer Treatment: WealthPercent-2 or Constant-50,,
+Group_StealTechnology,Civilian Treatment: WealthPercent-02 or Constant-16 ,,
+Group_IncomeDistribution,List with players harvesting income and the vector of incomes for all players,"[[17, 22, 27, 32, 37]]",
+Group_ID_Description,!Uninformative holdover from other experiments---should be deleted!,,!Uninformative holdover from other experiments---should be deleted!
+ ,"The amount a civilian steals when stealTechnology=’WealthPercent’
+!missing from sessions with Group_stealTechnology=""Constant""!
+!Should be labeled “Player_ROI_steal”!",,"!missing from sessions with Group_stealTechnology=""Constant""! !Should be labeled “Player_ROI_steal”!"
