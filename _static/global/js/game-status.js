@@ -33,7 +33,6 @@ let gameStatusComponent = {
     computed: {
         probabilityCulprit() {
 
-            // todo do we need the amax thing anymore?
             return this.probCulprit[this.investigationCount]
 
         },
