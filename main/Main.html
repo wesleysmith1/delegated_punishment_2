@@ -91,8 +91,6 @@
                 :investigation-count="investigationCount"
                 :defend-token-total="defendTokenTotal"
                 :is-officer="isOfficer"
-                :a-max="aMax"
-                :beta="beta"
                 :review-probability="reviewProbability"
                 @update-probability-reprimand="updateProbabilityReprimand"
             ></game-status-component>
@@ -153,8 +151,6 @@
                     tutorialDuration: {{C.tutorial_duration_seconds}},
                     gameDuration: {{C.game_duration_seconds}} * 1000,
 
-                    aMax: {{C.a_max}},
-                    beta: {{C.beta}},
                     reviewProbability: {{C.officer_review_probability}},
                     mapSize: {{C.civilian_map_size}},
                     defendTokenSize: {{C.defend_token_size}},
