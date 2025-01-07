@@ -38,7 +38,7 @@ class C(BaseConstants):
     officer_reprimand_amount = [m,m,m,m,m,m,m,m,m,m,m,m]
 
     """Officer income (bonus). One for each group"""
-    officer_income = 50
+    officer_income = 2
     officer_bonus_percentage = .02
 
     """ 

@@ -151,7 +151,7 @@ class GenerateCsv:
                 player = players[player_id]
 
                 # update steal token
-                player.steal_token.update(player_id, data['steal_reset'], 0, 'NA')
+                player.steal_token.update(player_id, data['steal_reset'], 0, 0)
 
                 if data.get('victim'):
                     player.steal_roi = 0
@@ -551,7 +551,7 @@ class GenerateCsv:
     def init_defend_tokens(self):
         x = {}
         for i in range(1, self.C.defend_token_total+1):
-            x[i] = "[{}, {}, {}, {}, {}, {}]".format(i, 0, 0, 0, 0, 'NA')
+            x[i] = "[{}, {}, {}, {}, {}, {}]".format(i, 0, 0, 0, 0, 0)
         return x
 
 
