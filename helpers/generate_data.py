@@ -298,7 +298,7 @@ class GenerateCsv:
 
                         else:
 
-                            i = self.format_intersection(token_number, culprit_id, steal_token_id, defend_map, 'NA', 0, 0,)
+                            i = self.format_intersection(token_number, culprit_id, steal_token_id, defend_map, 'NA', 0, 0, 0)
 
                         # log.info("CULPRIT_ID: {}".format(culprit_id))
 
